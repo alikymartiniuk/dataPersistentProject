@@ -7,11 +7,12 @@ using UnityEngine.Events;
 public class Brick : MonoBehaviour
 {
     public UnityEvent<int> onDestroyed;
-    
+    MainManager mainManager;
     public int PointValue;
 
     void Start()
     {
+        mainManager = FindObjectOfType(typeof(MainManager)) as MainManager;
         var renderer = GetComponentInChildren<Renderer>();
 
         MaterialPropertyBlock block = new MaterialPropertyBlock();
@@ -39,5 +40,9 @@ public class Brick : MonoBehaviour
         
         //slight delay to be sure the ball have time to bounce
         Destroy(gameObject, 0.2f);
+        mainManager.CheckEndGame();
+        
     }
+
+ 
 }

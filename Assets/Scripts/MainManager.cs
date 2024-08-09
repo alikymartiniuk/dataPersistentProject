@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,7 +15,7 @@ public class MainManager : MonoBehaviour
     public GameObject GameOverText;
     
     private bool m_Started = false;
-    private int m_Points;
+    public int m_Points;
     
     private bool m_GameOver = false;
 
@@ -71,6 +72,32 @@ public class MainManager : MonoBehaviour
     public void GameOver()
     {
         m_GameOver = true;
+        CompareHighScore();
+    }
+
+    public void CheckEndGame(){
+        Brick[] allBricks = FindObjectsOfType<Brick>();
+        int count = allBricks.Length;
+
+        if (count <= 0){
+            EndGame();
+        }
+    }
+
+    public void EndGame(){
+        CompareHighScore();
+    }
+
+    public void CompareHighScore(){
+        GameManager.Instance.LoadHighScore();
+        float highscore = GameManager.Instance.m_HighScore;
         GameOverText.SetActive(true);
+
+        if (m_Points > highscore){
+            GameManager.Instance.saveHighScore(m_Points);
+            GameOverText.GetComponent<Text>().text = $"You beat the HighScore with {m_Points} points! \nCongratulations! \nEspace to restart";
+        } else {
+            GameOverText.GetComponent<Text>().text = $"Espace to restart";
+        }
     }
 }
